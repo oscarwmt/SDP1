@@ -1,0 +1,379 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+/* Estilos generales para el header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #333;
+  color: #fff;
+}
+
+/* Logotipo */
+.logo {
+  flex: 1;
+}
+
+.logo-image {
+  height: 50px; /* Ajusta el tamaño del logo */
+}
+
+/* Barra de navegación */
+.nav {
+  flex: 2;
+  text-align: center;
+}
+
+.nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.nav-link {
+  color: #fff;
+  text-decoration: none;
+  font-size: 18px;
+  transition: color 0.3s;
+}
+
+.nav-link:hover {
+  color: #ffcc00; /* Color al pasar el puntero */
+}
+
+.nav-link.active {
+  color: #ffcc00; /* Color para el enlace activo */
+  font-weight: bold;
+}
+
+/* Iconos de redes sociales */
+.social {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+}
+
+.social-link {
+  color: #fff;
+  font-size: 24px;
+  transition: color 0.3s;
+}
+
+.social-link:hover {
+  color: #ffcc00; /* Color al pasar el puntero */
+}
+
+/* Estilos generales para el header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #333;
+  color: #fff;
+}
+
+/* Logotipo */
+.logo {
+  flex: 1;
+}
+
+.logo-image {
+  height: 50px; /* Ajusta el tamaño del logo */
+  width: auto; /* Mantiene la proporción de la imagen */
+}
+
+/* Barra de navegación */
+.nav {
+  flex: 2;
+  text-align: center;
+}
+
+.nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* Estilos para los enlaces de navegación */
+.nav-link {
+  color: #fff; /* Color normal */
+  text-decoration: none;
+  font-size: 18px;
+  padding: 5px 10px;
+  transition: all 0.3s ease; /* Transición suave */
+}
+
+/* Estado hover */
+.nav-link:hover {
+  color: #ffcc00; /* Cambia el color al pasar el puntero */
+  background-color: #555; /* Fondo al pasar el puntero */
+  border-radius: 5px; /* Bordes redondeados */
+}
+
+/* Estado activo */
+.nav-link.active {
+  color: #ffcc00; /* Color para el enlace activo */
+  font-weight: bold;
+  border-bottom: 2px solid #ffcc00; /* Subrayado para el enlace activo */
+}
+
+/* Iconos de redes sociales */
+.social {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+}
+
+.social-link {
+  color: #fff;
+  font-size: 24px;
+  transition: color 0.3s;
+}
+
+.social-link:hover {
+  color: #ffcc00; /* Color al pasar el puntero */
+}
+
+.propiedades {
+  padding: 20px;
+}
+
+.propiedades-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.propiedad-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.propiedad-card:hover {
+  transform: translateY(-5px);
+}
+
+.propiedad-imagen {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.propiedad-info {
+  padding: 15px;
+}
+
+.propiedad-info h2 {
+  margin: 0 0 10px;
+  font-size: 1.5rem;
+}
+
+.propiedad-info p {
+  margin: 5px 0;
+  font-size: 1rem;
+  color: #555;
+}
+
+/* Botones admin propiedades*/
+/* Estilos generales */
+.agregar-propiedad,
+.editar-propiedad,
+.propiedades {
+  padding: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+label {
+  font-weight: bold;
+}
+
+input,
+textarea,
+select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.propiedades-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.propiedad-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.propiedad-imagen {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.propiedad-info {
+  padding: 15px;
+}
+
+/* Estilos para el formulario de edición de propiedades */
+.editar-propiedad {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Contenedor de imágenes */
+.imagenes-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+/* Estilo para cada item de imagen */
+.imagen-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+/* Estilo para las imágenes - ancho fijo de 150px */
+.imagen-item img {
+  width: 150px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 3px;
+  margin-bottom: 8px;
+}
+
+/* Imagen principal - destacada con borde */
+.imagen-principal {
+  border: 3px solid #4caf50 !important;
+}
+
+/* Contenedor de botones para cada imagen */
+.imagen-actions {
+  display: flex;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+/* Estilo base para botones */
+.imagen-actions button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.3s;
+}
+
+/* Botón Eliminar */
+.btn-eliminar {
+  background-color: #f44336;
+  color: white;
+}
+
+.btn-eliminar:hover {
+  background-color: #d32f2f;
+}
+
+/* Botón Seleccionar */
+.btn-seleccionar {
+  background-color: #2196f3;
+  color: white;
+}
+
+.btn-seleccionar:hover {
+  background-color: #0b7dda;
+}
+
+/* Botón Principal (cuando ya está seleccionado) */
+.btn-principal {
+  background-color: #4caf50;
+  color: white;
+  cursor: default;
+}
+
+/* Texto debajo de la imagen */
+.imagen-item p {
+  margin: 5px 0;
+  font-size: 12px;
+  color: #555;
+  text-align: center;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Estilos para el botón de guardar */
+button[type="submit"] {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+button[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+button[type="submit"]:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}

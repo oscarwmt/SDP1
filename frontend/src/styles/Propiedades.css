@@ -1,0 +1,161 @@
+/* Propiedades.css - Estilos para el listado de propiedades */
+
+/* Estilos generales */
+.propiedades-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.propiedades-title {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  color: #2c3e50;
+  font-size: 2.2rem;
+  font-weight: 600;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 0.5rem;
+  display: inline-block;
+  width: 100%;
+}
+
+/* Estados de carga y error */
+.propiedades-loading {
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.2rem;
+  color: #3498db;
+}
+
+.propiedades-error {
+  text-align: center;
+  padding: 3rem;
+  color: #e74c3c;
+  font-size: 1.2rem;
+  background-color: #f8d7da;
+  border-radius: 4px;
+  margin: 2rem;
+  border: 1px solid #f5c6cb;
+}
+
+/* Listado de propiedades */
+.propiedades-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+  padding: 0 1rem;
+}
+
+/* Tarjeta de propiedad */
+.propiedad-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  background-color: #fff;
+}
+
+.propiedad-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.propiedad-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  height: 100%;
+}
+
+.propiedad-image {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+  border-bottom: 1px solid #eee;
+}
+
+.propiedad-info {
+  padding: 1.5rem;
+}
+
+.propiedad-title {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #2c3e50;
+  font-size: 1.3rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.propiedad-description {
+  color: #7f8c8d;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+/* Características de la propiedad */
+.propiedad-features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  font-size: 0.95rem;
+}
+
+.propiedad-feature {
+  margin: 0.3rem 0;
+  color: #34495e;
+}
+
+/* Paginación */
+.propiedades-pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  padding: 1rem;
+}
+
+.page-button {
+  padding: 0.75rem 1.25rem;
+  border: 1px solid #ddd;
+  background-color: white;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.page-button:hover {
+  background-color: #f5f5f5;
+}
+
+.active-page-button {
+  background-color: #3498db;
+  color: white;
+  border-color: #3498db;
+}
+
+.active-page-button:hover {
+  background-color: #2980b9;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .propiedades-container {
+    padding: 1rem;
+  }
+
+  .propiedades-list {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .propiedad-image {
+    height: 200px;
+  }
+}
