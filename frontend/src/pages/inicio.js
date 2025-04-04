@@ -2,8 +2,21 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FaSearch, FaStar } from "react-icons/fa";
 
+// Función para formatear números como $00.000.000
+const formatCurrency = (value, currency) => {
+  if (!value) return `$0 ${currency}`;
+
+  // Formatear el número con separadores de miles
+  const formattedValue = new Intl.NumberFormat("es-CO", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(value);
+
+  return `${currency} ${formattedValue} `;
+};
+
 function Inicio() {
-  const [propiedadesDestacadas, setPropiedadesDestacadas] = useState([]);
+  const [propiedades, setPropiedades] = useState([]); // Cambiado de propiedadesDestacadas a propiedades
   const [loading, setLoading] = useState(true);
   const [ciudades, setCiudades] = useState([]);
   const [tipos, setTipos] = useState([]);
@@ -12,40 +25,27 @@ function Inicio() {
     tipo: "",
   });
 
-  // Obtener propiedades destacadas y datos para filtros
+  // Obtener todas las propiedades y datos para filtros
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
 
-        // Obtener propiedades destacadas
-        const destacadasResponse = await fetch("/api/propiedades/destacadas");
-        let destacadasData = destacadasResponse.ok
-          ? await destacadasResponse.json()
+        // 1. Obtener todas las propiedades
+        const propiedadesResponse = await fetch("/api/inicio");
+        const propiedadesData = propiedadesResponse.ok
+          ? await propiedadesResponse.json()
           : [];
+        setPropiedades(propiedadesData);
 
-        // Si hay menos de 4, completar con propiedades aleatorias
-        if (destacadasData.length < 4) {
-          const randomResponse = await fetch(
-            `/api/propiedades/random?limit=${4 - destacadasData.length}`
-          );
-          const randomData = randomResponse.ok
-            ? await randomResponse.json()
-            : [];
-          destacadasData = [...destacadasData, ...randomData];
-        }
-
-        setPropiedadesDestacadas(destacadasData.slice(0, 4));
-
-        // Obtener ciudades desde la tabla CIUDADES
+        // 2. Obtener ciudades
         const ciudadesResponse = await fetch("/api/ciudades");
-        console.log("Status ciudades:", ciudadesResponse.status);
         const ciudadesData = ciudadesResponse.ok
           ? await ciudadesResponse.json()
           : [];
         setCiudades(ciudadesData);
 
-        // Obtener tipos desde la tabla TIPOS
+        // 3. Obtener tipos
         const tiposResponse = await fetch("/api/tipos");
         const tiposData = tiposResponse.ok ? await tiposResponse.json() : [];
         setTipos(tiposData);
@@ -69,29 +69,16 @@ function Inicio() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    console.log("Valores actuales de filtros:", filtros); // ← Esto es clave
-
-    // Redirigir a propiedades con los filtros
     window.location.href = `/propiedades?ciudad=${filtros.ciudad}&tipo=${filtros.tipo}`;
   };
-
-  console.log(
-    "Consulta propiedad -- ",
-    window.location.href,
-    "--",
-    filtros,
-    " <--"
-  );
 
   if (loading) {
     return <div style={styles.loading}>Cargando...</div>;
   }
 
-  console.log("Otro -- ", loading, " <--");
-
   return (
     <div style={styles.container}>
-      {/* Hero Section con imagen al 100% */}
+      {/* Hero Section */}
       <div style={styles.hero}>
         <div style={styles.heroContent}>
           <h1 style={styles.heroTitle}>Encuentra tu propiedad ideal</h1>
@@ -135,18 +122,16 @@ function Inicio() {
         </div>
       </div>
 
-      {/* Propiedades destacadas */}
+      {/* Propiedades Destacadas */}
       <div style={styles.featuredSection}>
         <h2 style={styles.sectionTitle}>Propiedades Destacadas</h2>
-        <p style={styles.sectionSubtitle}>
-          Las mejores opciones seleccionadas para ti
-        </p>
+        <p style={styles.sectionSubtitle}></p>
 
         <div style={styles.featuredGrid}>
-          {propiedadesDestacadas.map((propiedad) => (
-            <div key={propiedad.id_propiedad} style={styles.featuredCard}>
+          {propiedades.map((propiedad) => (
+            <div key={propiedad.id} style={styles.featuredCard}>
               <Link
-                to={`/propiedad/${propiedad.id_propiedad}`}
+                to={`/propiedad/${propiedad.id}`}
                 style={styles.featuredLink}
               >
                 <div style={styles.featuredImageContainer}>
@@ -159,19 +144,20 @@ function Inicio() {
                       e.target.src = "/imagen-no-disponible.jpg";
                     }}
                   />
-                  {propiedad.destacadas && (
+                  {propiedad.destacada === 1 && (
                     <div style={styles.featuredBadge}>
                       <FaStar /> Destacada
                     </div>
                   )}
                 </div>
                 <div style={styles.featuredInfo}>
+                  <h3 style={styles.featuredLocation}>
+                    {propiedad.Ntipo} / {propiedad.estado}
+                  </h3>
                   <h3 style={styles.featuredTitle}>{propiedad.titulo}</h3>
-                  <p style={styles.featuredLocation}>
-                    {propiedad.ciudad}, {propiedad.pais}
-                  </p>
+                  <p style={styles.featuredLocation}>{propiedad.Nciudad}</p>
                   <p style={styles.featuredPrice}>
-                    {propiedad.precio} {propiedad.moneda}
+                    {formatCurrency(propiedad.precio, propiedad.moneda)}
                   </p>
                   <div style={styles.featuredFeatures}>
                     <span>{propiedad.habitaciones} hab.</span>
@@ -188,7 +174,7 @@ function Inicio() {
   );
 }
 
-// Estilos modernos
+// Estilos actualizados
 const styles = {
   container: {
     maxWidth: "100%",
@@ -196,21 +182,22 @@ const styles = {
     padding: 0,
     fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
     color: "#333",
-  },
-  loading: {
-    textAlign: "center",
-    padding: "40px",
-    fontSize: "18px",
-    color: "#666",
+    overflowX: "hidden",
   },
   hero: {
     position: "relative",
-    width: "100%",
+    width: "100vw",
+    left: "50%",
+    right: "50%",
+    marginLeft: "-50vw",
+    marginRight: "-50vw",
     height: "70vh",
     minHeight: "500px",
     backgroundImage:
       "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../fotos/portada1.jpg')",
+    backgroundSize: "cover",
     backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -287,18 +274,19 @@ const styles = {
   },
   featuredGrid: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-    gap: "30px",
+    gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))", // Cambiado a 250px
+    gap: "20px",
   },
   featuredCard: {
-    borderRadius: "12px",
+    width: "250px", // Ancho fijo de 250px
+    borderRadius: "8px",
     overflow: "hidden",
-    boxShadow: "0 5px 15px rgba(0,0,0,0.1)",
+    boxShadow: "0 3px 10px rgba(0,0,0,0.1)",
     transition: "all 0.3s ease",
     backgroundColor: "white",
     ":hover": {
-      transform: "translateY(-10px)",
-      boxShadow: "0 15px 30px rgba(0,0,0,0.15)",
+      transform: "translateY(-5px)",
+      boxShadow: "0 10px 20px rgba(0,0,0,0.15)",
     },
   },
   featuredLink: {
@@ -310,7 +298,7 @@ const styles = {
   featuredImageContainer: {
     position: "relative",
     width: "100%",
-    height: "200px",
+    height: "160px", // Altura reducida
     overflow: "hidden",
   },
   featuredImage: {
@@ -324,13 +312,13 @@ const styles = {
   },
   featuredBadge: {
     position: "absolute",
-    top: "15px",
-    right: "15px",
+    top: "10px",
+    right: "10px",
     backgroundColor: "#FFD700",
     color: "#333",
-    padding: "5px 10px",
-    borderRadius: "20px",
-    fontSize: "14px",
+    padding: "3px 8px",
+    borderRadius: "15px",
+    fontSize: "12px",
     fontWeight: "600",
     display: "flex",
     alignItems: "center",
@@ -338,30 +326,44 @@ const styles = {
     boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
   },
   featuredInfo: {
-    padding: "20px",
+    padding: "15px",
   },
   featuredTitle: {
-    fontSize: "1.3rem",
+    fontSize: "1rem",
     fontWeight: "600",
-    margin: "0 0 10px",
+    margin: "0 0 8px",
     color: "#2c3e50",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
   },
   featuredLocation: {
     color: "#7f8c8d",
-    margin: "0 0 10px",
-    fontSize: "14px",
+    margin: "0 0 8px",
+    fontSize: "12px",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
   },
   featuredPrice: {
-    fontSize: "1.5rem",
+    fontSize: "1.1rem",
     fontWeight: "700",
     color: "#e74c3c",
-    margin: "0 0 15px",
+    margin: "0 0 10px",
   },
   featuredFeatures: {
     display: "flex",
-    gap: "15px",
+    gap: "10px",
     color: "#34495e",
-    fontSize: "14px",
+    fontSize: "12px",
+    justifyContent: "space-between",
+  },
+  loading: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100vh",
+    fontSize: "1.5rem",
   },
 };
 

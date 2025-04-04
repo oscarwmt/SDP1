@@ -1,0 +1,7 @@
+# Node modules
+/backend/node_modules/
+/frontend/node_modules/
+
+# Archivos JSON
+/backend/package.json
+/frontend/package.json

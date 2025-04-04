@@ -339,7 +339,7 @@ function AgregarPropiedad() {
                 required
               >
                 <option value="UF">UF</option>
-                <option value="CLP">Pesos Chilenos</option>
+                <option value="$">Pesos Chilenos</option>
               </select>
             </div>
           </div>

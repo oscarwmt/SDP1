@@ -41,86 +41,90 @@ function EditarPropiedad() {
   const [submitError, setSubmitError] = useState(null);
 
   // Cargar datos iniciales
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
+  useEffect(
+    () => {
+      const fetchData = async () => {
+        try {
+          setLoading(true);
 
-        // Verificar token antes de hacer las peticiones
-        if (!token) {
-          navigate("/login", {
-            state: {
-              from: `/propiedades/${id}/editar`,
-              message: "Debes iniciar sesión para continuar",
-            },
+          // Verificar token antes de hacer las peticiones
+          if (!token) {
+            navigate("/login", {
+              state: {
+                from: `/propiedades/${id}/editar`,
+                message: "Debes iniciar sesión para continuar",
+              },
+            });
+            return;
+          }
+
+          const [
+            ciudadesResponse,
+            tiposResponse,
+            propiedadResponse,
+            imagenesResponse,
+          ] = await Promise.all([
+            axios.get("http://localhost:5001/api/ciudades"),
+            axios.get("http://localhost:5001/api/tipos"),
+            axios.get(`http://localhost:5001/api/propiedades/${id}`, {
+              headers: { Authorization: `Bearer ${token}` },
+            }),
+            axios.get(`http://localhost:5001/api/propiedades/${id}/imagenes`, {
+              headers: { Authorization: `Bearer ${token}` },
+            }),
+          ]);
+
+          const propiedadData = propiedadResponse.data;
+          let imagenesData = imagenesResponse.data.filter(
+            (img) => img.url_imagen
+          );
+
+          // Configurar estados
+          setCiudades(ciudadesResponse.data);
+          setTiposPropiedad(tiposResponse.data);
+          setFormData({
+            ...propiedadData,
+            ciudad: parseInt(propiedadData.ciudad) || 1,
+            habitaciones: propiedadData.habitaciones || "",
+            banios: propiedadData.banios || "",
+            pisos: propiedadData.pisos || "",
+            precio: propiedadData.precio || "",
           });
-          return;
+
+          setImagenesExistentes(imagenesData);
+
+          // Establecer imagen principal
+          const imgPrincipal = imagenesData.find((img) =>
+            img.url_imagen.includes(propiedadData.url_imagen_principal)
+          );
+          setImagenPrincipal(imgPrincipal || null);
+
+          setLoading(false);
+        } catch (error) {
+          console.error("Error al cargar datos:", error);
+          if (error.response?.status === 401) {
+            localStorage.removeItem("token");
+            navigate("/login", {
+              state: {
+                from: `/propiedades/${id}/editar`,
+                message:
+                  error.response.data?.error === "Token expirado"
+                    ? "Tu sesión ha expirado. Por favor inicia sesión nuevamente."
+                    : "Debes iniciar sesión para continuar",
+              },
+            });
+          } else {
+            setError(error.response?.data?.message || error.message);
+          }
+          setLoading(false);
         }
+      };
 
-        const [
-          ciudadesResponse,
-          tiposResponse,
-          propiedadResponse,
-          imagenesResponse,
-        ] = await Promise.all([
-          axios.get("http://localhost:5001/api/ciudades"),
-          axios.get("http://localhost:5001/api/tipos"),
-          axios.get(`http://localhost:5001/api/propiedades/${id}`, {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          axios.get(`http://localhost:5001/api/propiedades/${id}/imagenes`, {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-        ]);
-
-        const propiedadData = propiedadResponse.data;
-        let imagenesData = imagenesResponse.data.filter(
-          (img) => img.url_imagen
-        );
-
-        // Configurar estados
-        setCiudades(ciudadesResponse.data);
-        setTiposPropiedad(tiposResponse.data);
-        setFormData({
-          ...propiedadData,
-          ciudad: parseInt(propiedadData.ciudad) || 1,
-          habitaciones: propiedadData.habitaciones || "",
-          banios: propiedadData.banios || "",
-          pisos: propiedadData.pisos || "",
-          precio: propiedadData.precio || "",
-        });
-
-        setImagenesExistentes(imagenesData);
-
-        // Establecer imagen principal
-        const imgPrincipal = imagenesData.find((img) =>
-          img.url_imagen.includes(propiedadData.url_imagen_principal)
-        );
-        setImagenPrincipal(imgPrincipal || null);
-
-        setLoading(false);
-      } catch (error) {
-        console.error("Error al cargar datos:", error);
-        if (error.response?.status === 401) {
-          localStorage.removeItem("token");
-          navigate("/login", {
-            state: {
-              from: `/propiedades/${id}/editar`,
-              message:
-                error.response.data?.error === "Token expirado"
-                  ? "Tu sesión ha expirado. Por favor inicia sesión nuevamente."
-                  : "Debes iniciar sesión para continuar",
-            },
-          });
-        } else {
-          setError(error.response?.data?.message || error.message);
-        }
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [id, token]);
+      fetchData();
+    },
+    [id, token],
+    [navigate]
+  );
 
   // Manejar cambios en el formulario
   const handleChange = (e) => {
@@ -322,7 +326,11 @@ function EditarPropiedad() {
 
     // Agregar datos del formulario
     Object.keys(formData).forEach((key) => {
-      if (formData[key] !== null && formData[key] !== undefined) {
+      if (
+        formData[key] !== null &&
+        formData[key] !== undefined &&
+        key !== "url_imagen_principal"
+      ) {
         formDataToSend.append(key, formData[key]);
       }
     });
@@ -367,7 +375,6 @@ function EditarPropiedad() {
           },
         }
       );
-      console.log(formDataToSend, response);
       if (response.data.success) {
         navigate(`/propiedades/${id}`, {
           state: {

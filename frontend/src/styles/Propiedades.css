@@ -108,6 +108,12 @@
   margin: 0.3rem 0;
   color: #34495e;
 }
+.propiedad-estado {
+  color: #ffa500;
+  font-size: 20px;
+  font-variant-caps: small-caps;
+  text-align: right;
+}
 
 /* Paginación */
 .propiedades-pagination {

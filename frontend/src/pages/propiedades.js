@@ -2,6 +2,19 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "../styles/Propiedades.css"; // Importar el archivo CSS
 
+// Función para formatear números como $00.000.000
+const formatCurrency = (value, currency) => {
+  if (!value) return `$0 ${currency}`;
+
+  // Formatear el número con separadores de miles
+  const formattedValue = new Intl.NumberFormat("es-CO", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(value);
+
+  return `${currency} ${formattedValue} `;
+};
+
 function Propiedades() {
   const [propiedades, setPropiedades] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -81,6 +94,7 @@ function Propiedades() {
                 }}
               />
               <div className="propiedad-info">
+                <p className="propiedad-estado">{propiedad.estado}</p>
                 <h2 className="propiedad-title">{propiedad.titulo}</h2>
                 <p className="propiedad-description">
                   {propiedad.descripcion.substring(0, 100)}...
@@ -94,8 +108,8 @@ function Propiedades() {
                     {propiedad.pais}
                   </p>
                   <p className="propiedad-feature">
-                    <strong>Precio:</strong> {propiedad.precio}{" "}
-                    {propiedad.moneda}
+                    <strong>Precio:</strong>{" "}
+                    {formatCurrency(propiedad.precio, propiedad.moneda)}
                   </p>
                   <p className="propiedad-feature">
                     <strong>Habitaciones:</strong> {propiedad.habitaciones}
